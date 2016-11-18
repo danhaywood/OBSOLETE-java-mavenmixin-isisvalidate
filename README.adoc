@@ -1,0 +1,161 @@
+= java-mavenmixin-resourcesinjavasrcdirs
+
+
+This module, intended for use within link:http://isis.apache.org[Apache Isis], provides a maven mixin which configures the build so that resources (eg `.layout.xml` files or `.png` image files) can be picked up from the `src/main/java` and `src/test/java` directories (as well as the usual `src/main/resources` and `src/test/resources` directories.
+This reduces the size of the maven `pom.xml` files; it simply needs to reference this module.
+
+The appropriate configuration is included in a `<profile>` which is automatically included in all builds.
+This profile can be disabled using a Maven property.
+
+
+
+
+== How to Configure/Use
+
+To use:
+
+* add the following to the `pom.xml` of the module(s) containing the JDO/DataNucleus entities: +
++
+[source,xml]
+----
+<build>
+    <plugins>
+        <plugin>
+            <groupId>com.github.odavid.maven.plugins</groupId>
+            <artifactId>mixin-maven-plugin</artifactId>
+            <version>0.1-alpha-39</version>
+            <extensions>true</extensions>
+            <configuration>
+                <mixins>
+                    <mixin>
+                        <groupId>com.danhaywood.mavenmixin</groupId>
+                        <artifactId>resourcesinjavasrcdirs</artifactId>
+                        <version>0.0.1</version>
+                    </mixin>
+                </mixins>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+----
+
+
+To disable the (profile contributed by this) mixin, pass the following system property to `mvn`:
+
+[source,bash]
+----
+-Dskip.danhaywood-mavenmixin-resourcesinjavasrcdirs
+----
+
+
+
+== Known issues
+
+None currently
+
+
+
+== Change Log
+
+* `0.0.1` - first release
+
+
+
+
+== Legal Stuff
+
+=== License
+
+[source]
+----
+Copyright 2016~date Dan Haywood
+
+Licensed under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+----
+
+
+
+=== Dependencies
+
+This mixin module relies on the link:https://github.com/odavid/maven-plugins[com.github.odavid.maven.plugins:mixin-maven-plugin], released under Apache License v2.0.
+
+
+
+== Maven deploy notes
+
+Only the `defn` module is deployed, and is done so using Sonatype's OSS support (see
+http://central.sonatype.org/pages/apache-maven.html[user guide]).
+
+
+=== Release to Sonatype's Snapshot Repo
+
+To deploy a snapshot, use:
+
+[source]
+----
+pushd mixin
+mvn clean deploy
+popd
+----
+
+The artifacts should be available in Sonatype's
+https://oss.sonatype.org/content/repositories/snapshots[Snapshot Repo].
+
+
+
+=== Release to Maven Central
+
+The `release.sh` script automates the release process.
+It performs the following:
+
+* performs a sanity check (`mvn clean install -o`) that everything builds ok
+* bumps the `pom.xml` to a specified release version, and tag
+* performs a double check (`mvn clean install -o`) that everything still builds ok
+* releases the code using `mvn clean deploy`
+* bumps the `pom.xml` to a specified release version
+
+For example:
+
+[source]
+----
+sh release.sh 0.0.1 \
+              0.0.2-SNAPSHOT \
+              dan@haywood-associates.co.uk \
+              "this is not really my passphrase"
+----
+
+where
+
+* `$1` is the release version
+* `$2` is the snapshot version
+* `$3` is the email of the secret key (`~/.gnupg/secring.gpg`) to use for signing
+* `$4` is the corresponding passphrase for that secret key.
+
+Other ways of specifying the key and passphrase are available, see the `pgp-maven-plugin`'s
+http://kohsuke.org/pgp-maven-plugin/secretkey.html[documentation]).
+
+If the script completes successfully, then push changes:
+
+[source]
+----
+git push origin master
+git push origin 0.0.1
+----
+
+If the script fails to complete, then identify the cause, perform a `git reset --hard` to start over and fix the issue
+before trying again. Note that in the `dom`'s `pom.xml` the `nexus-staging-maven-plugin` has the
+`autoReleaseAfterClose` setting set to `true` (to automatically stage, close and the release the repo). You may want
+to set this to `false` if debugging an issue.
+
+According to Sonatype's guide, it takes about 10 minutes to sync, but up to 2 hours to update http://search.maven.org[search].
