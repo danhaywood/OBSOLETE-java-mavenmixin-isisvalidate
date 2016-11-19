@@ -17,8 +17,8 @@ The plugin requires two properties:
 [source,xml]
 ----
 <properties>
-    <isis.version>1.13.1</isis.version>                                 <!-- 1 -->	
-    <danhaywood-mavenmixin-isisvalidate.appManifest>                    <!-- 2 -->
+    <isis.version>1.13.1</isis.version>                                 <!--1-->	
+    <danhaywood-mavenmixin-isisvalidate.appManifest>                    <!--2-->
         domainapp.modules.simple.SimpleModuleManifest
     </danhaywood-mavenmixin-isisvalidate.appManifest>
 </properties>
