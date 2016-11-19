@@ -59,6 +59,8 @@ To use:
 </build>
 ----
 
+* Specify the mandatory input properties (see above).
+
 
 To disable the (profile contributed by this) mixin, pass the following system property to `mvn`:
 
