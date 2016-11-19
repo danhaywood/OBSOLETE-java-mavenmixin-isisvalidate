@@ -112,19 +112,12 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
-            <id>danhaywood-mavenmixin-sonatyperelease</id>
-            <!-- 
-            this profile is not part of the mixin, but is required to be defined as a profile
-            in order to release this mixin pom.xml to Maven Central repo
-            -->
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>ossrh</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-                </snapshotRepository>
-            </distributionManagement>
-        </profile>
     </profiles>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
     
 </project>
