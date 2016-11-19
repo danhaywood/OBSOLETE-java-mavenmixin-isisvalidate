@@ -50,7 +50,7 @@ To use:
                     <mixin>
                         <groupId>com.danhaywood.mavenmixin</groupId>
                         <artifactId>isisvalidate</artifactId>
-                        <version>0.0.2</version>
+                        <version>0.0.1</version>
                     </mixin>
                 </mixins>
             </configuration>
