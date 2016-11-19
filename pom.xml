@@ -37,26 +37,6 @@
         </developer>
     </developers>    
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.github.odavid.maven.plugins</groupId>
-                <artifactId>mixin-maven-plugin</artifactId>
-                <version>0.1-alpha-39</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <mixins>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>sonatyperelease</artifactId>
-                            <version>0.0.1</version>
-                        </mixin>
-                    </mixins>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    
     <properties>
         <isis.version>1.13.1</isis.version>
         <danhaywood-mavenmixin-isisvalidate.appManifest>domainapp.modules.simple.SimpleModuleManifest</danhaywood-mavenmixin-isisvalidate.appManifest>
@@ -112,12 +92,52 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>danhaywood-mavenmixin-sonatyperelease</id>
+            <!-- 
+            this profile is not part of the mixin, but is required to be defined as a profile
+            in order to release this mixin pom.xml to Maven Central repo
+            -->
+            <build>
+                <plugins>
+                    <!-- http://central.sonatype.org/pages/apache-maven.html -->
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.2</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <!-- http://kohsuke.org/pgp-maven-plugin/secretkey.html instead of maven-gpg-plugin -->
+                    <plugin>
+                        <groupId>org.kohsuke</groupId>
+                        <artifactId>pgp-maven-plugin</artifactId>
+                        <version>1.1</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
     </profiles>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
+
+
     
 </project>
