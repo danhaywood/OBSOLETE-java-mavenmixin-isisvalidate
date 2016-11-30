@@ -38,16 +38,17 @@
     </developers>    
 
     <properties>
-        <isis.version>1.13.1</isis.version>
-        <danhaywood-mavenmixin-isisvalidate.appManifest>domainapp.modules.simple.SimpleModuleManifest</danhaywood-mavenmixin-isisvalidate.appManifest>
+        <isis-maven-plugin.version>1.13.1</isis-maven-plugin.version>
+
+        <isis-maven-plugin.validate.appManifest>domainapp.modules.simple.SimpleModuleManifest</isis-maven-plugin.validate.appManifest>
     </properties>
         
     <profiles>
         <profile>
-            <id>danhaywood-mavenmixin-isisvalidate</id>
+            <id>mavenmixin-isisvalidate</id>
             <activation>
                 <property>
-                    <name>!skip.danhaywood-mavenmixin-isisvalidate</name>
+                    <name>!skip.mavenmixin-isisvalidate</name>
                 </property>
             </activation>
             <build>
@@ -55,9 +56,9 @@
                     <plugin>
                         <groupId>org.apache.isis.tool</groupId>
                         <artifactId>isis-maven-plugin</artifactId>
-                        <version>${isis.version}</version>
+                        <version>${isis-maven-plugin.version}</version>
                         <configuration>
-                            <appManifest>${danhaywood-mavenmixin-isisvalidate.appManifest}</appManifest>
+                            <appManifest>${isis-maven-plugin.validate.appManifest}</appManifest>
                         </configuration>
                         <dependencies>
                             <dependency>

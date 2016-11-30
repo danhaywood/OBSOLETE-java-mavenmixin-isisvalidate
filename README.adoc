@@ -10,31 +10,58 @@ The appropriate configuration is included in a `<profile>` which is automaticall
 This profile can be disabled using a Maven property.
 
 
-== Input Properties
 
-The plugin requires two properties:
 
+== How to Configure
+
+To configure:
+
+* copy and paste the following into either the `pom.xml` of the consuming module or (better still) the `pom.xml` of the top-level parent of the consuming module: +
++
 [source,xml]
 ----
 <properties>
-    <isis.version>1.13.1</isis.version>                                 <!--1-->	
-    <danhaywood-mavenmixin-isisvalidate.appManifest>                    <!--2-->
-        domainapp.modules.simple.SimpleModuleManifest
-    </danhaywood-mavenmixin-isisvalidate.appManifest>
+    ...
+    <mavenmixin-isisvalidate.version>0.0.2</mavenmixin-isisvalidate.version>
+    <isis-maven-plugin.version>1.13.1</isis-maven-plugin.version>
+    ...
 </properties>
 ----
-<1> the version of Apache Isis
-<2> the fully qualified class name of the `AppManifest` that references the module(s) to validate.
++
+and: +
++
+[source,xml]
+----
+<build>
+    <pluginManagement>
+        <plugins>
+            ...
+            <plugin>
+                <groupId>org.apache.isis.tool</groupId>
+                <artifactId>isis-maven-plugin</artifactId>
+                <version>${isis-maven-plugin.version}</version>
+            </plugin>
+            ...
+        </plugins>
+    </pluginManagement>
+</build>
+----
 
-These properties should be specified in the consuming module.
+* update the following property/ies in the `pom.xml` of the consuming module: +
++
+[source,xml]
+----
+<properties>
+    ...
+    <isis-maven-plugin.validate.appManifest>                                 <!--1-->
+        domainapp.modules.simple.SimpleModuleManifest
+    </isis-maven-plugin.validate.appManifest>
+    ...
+</properties>
+----
+<1> the fully qualified class name of the `AppManifest` that references the module(s) to validate.
 
-
-
-== How to Configure/Use
-
-To use:
-
-* add the following to the `pom.xml` of the module(s) containing the JDO/DataNucleus entities: +
+* add the following to the `pom.xml` of the consuming module: +
 +
 [source,xml]
 ----
@@ -50,7 +77,7 @@ To use:
                     <mixin>
                         <groupId>com.danhaywood.mavenmixin</groupId>
                         <artifactId>isisvalidate</artifactId>
-                        <version>0.0.1</version>
+                        <version>${mavenmixin-isisvalidate.version}</version>
                     </mixin>
                 </mixins>
             </configuration>
@@ -59,14 +86,13 @@ To use:
 </build>
 ----
 
-* Specify the mandatory input properties (see above).
 
 
 To disable the (profile contributed by this) mixin, pass the following system property to `mvn`:
 
 [source,bash]
 ----
-mvn -Dskip.danhaywood-mavenmixin-isisvalidate
+mvn -Dskip.mavenmixin-isisvalidate
 ----
 
 
@@ -79,6 +105,7 @@ None currently
 
 == Change Log
 
+* `0.0.2` - updates README for properties and plugin management, shortens property names and profile id
 * `0.0.1` - first release; released for Apache Isis 1.13.1
 
 
@@ -132,8 +159,8 @@ For example:
 
 [source]
 ----
-sh release.sh 0.0.1 \
-              0.0.2-SNAPSHOT \
+sh release.sh 0.0.2 \
+              0.0.3-SNAPSHOT \
               dan@haywood-associates.co.uk \
               "this is not really my passphrase"
 ----
@@ -153,7 +180,7 @@ If the script completes successfully, then push changes:
 [source]
 ----
 git push origin master
-git push origin 0.0.1
+git push origin 0.0.2
 ----
 
 If the script fails to complete, then identify the cause, perform a `git reset --hard` to start over and fix the issue before trying again.
