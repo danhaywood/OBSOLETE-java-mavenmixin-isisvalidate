@@ -2,6 +2,7 @@
 :_imagesdir: ./
 :toc:
 
+*As of 1.15.0, this module has been moved into Isis core*
 
 This module, for use within link:http://isis.apache.org[Apache Isis] applications, provides a link:https://github.com/odavid/maven-plugins[maven mixin] that can be used to run the `validate` goal of the link:http://isis.apache.org/guides/rgmvn.html[Apache Isis maven plugin] for a domain object model.
 This reduces the size of the maven `pom.xml` file for that consuming module; it simply needs to reference _this_ module using the `mixin-maven-plugin`.
